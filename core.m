@@ -207,7 +207,7 @@ function [fname,basin_names,A3D] = core(slice,modeflag)
     anom = a-glodap_c14_age;
     
     
-    if (strcmp(modeflag,'all')
+    if (strcmp(modeflag,'all'))
         %
         % Second file with no averaging, all the data are kept 
         % even if there are multiple measurements in the same box
