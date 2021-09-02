@@ -1,0 +1,175 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{bbm}
+\usepackage[small,bf]{caption2}
+\usepackage{graphics}
+\usepackage{amsmath, amssymb}
+\usepackage{fullpage}
+\newtheorem{problem}{Problem}
+\newcommand{\dd}[1]{\mathrm{d}#1}
+\newcommand{\p}{\mbox{prob}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\wmp}{\widehat{\mathbf{w}}}
+\newcommand{\dat}{\mathbf{d}}
+\def\bPhi{\boldsymbol{\Phi}}
+\def\A{\boldsymbol{\sf A}}
+\def\B{\boldsymbol{\sf B}}
+\def\C{\boldsymbol{\sf C}}
+\def\W{\boldsymbol{\sf W}}
+\def\p{\mbox{prob}}
+\begin{document}
+\thispagestyle{empty}
+\title{PALEO DATA INTERPOLATION
+\newline
+}
+\date{Summer 2021}
+%\maketitle
+\noindent
+{\bf PALEO DATA INTERPOLATION}\\{\em Notes Version 1}
+\newline
+\newline
+\noindent
+{\bf The Likelihood:}
+\newline
+\noindent
+We assign a Gaussian probability model for the data, $\dat$:
+\begin{equation}
+  \p(\dat|\beta) = \frac{\beta^{n/2}\det(\W)^{1/2}}{(2\pi)^{n/2}} \exp
+  \left(
+    -\frac{\beta}{2} (\bPhi\w - \dat)^T \W (\bPhi\w - \dat)
+  \right),
+\end{equation}
+or, equivalently
+\begin{equation}
+  \p(\dat|\beta) = \frac{\exp\left(-\beta E_d(\dat)\right)}{Z_d(\beta)},
+\end{equation}
+where
+\begin{equation}
+  E_d(\dat) = \frac{1}{2} (\bPhi\w - \dat)^T \W (\bPhi \w -\dat),
+\end{equation}
+and
+\begin{equation}
+  Z_d(\beta) = \beta^{-n/2} \det(\W)^{-1/2}.
+\end{equation}
+\newline
+\newline
+\noindent
+{\bf The Prior:}
+\newline
+\noindent
+We assign a Gaussian prior to the interpolation weights, $\w$:
+\begin{equation}
+  \p(\w|\alpha) = \frac{\alpha^{k/2}\det(\C)^{1/2}}{(2\pi)^{k/2}} \exp
+  \left(
+    -\frac{\alpha}{2} \w^T \C \w,
+  \right)
+\end{equation}
+or, equivalently
+\begin{equation}
+  \p(\w |\alpha ) = \frac{ \exp \left(-\alpha E_w(\w) \right) }{Z_w(\alpha)},
+\end{equation}
+where
+\begin{equation}
+  E_w(\w ) = \frac{1}{2}\w^T\C\w,
+\end{equation}
+and
+\begin{equation}
+  Z_w(\alpha) = \alpha^{-k/2}\det(\C)^{-1/2}.
+\end{equation}
+\newline
+\newline
+\noindent
+{\bf The Posterior:}
+\newline
+\noindent
+The posterior probability, obtained from Bayes' Theorem, is then
+\begin{equation}
+  \begin{split}
+    \p(\w|\dat,\W,\C,\alpha,\beta) &= \frac{\p(\dat|\w,\beta)\p(\w|\alpha)}{\p(\dat|\alpha,\beta)}\\
+    &=  \frac{\exp\left(- M(\w) \right)}{Z_M(\alpha,\beta)},
+  \end{split}
+\end{equation}
+where
+\begin{equation}
+  M(\w) = -\alpha E_w(\w)-\beta E_d(\dat).
+\end{equation}
+Notice that the evidence, $p(\dat|\alpha,\beta)$, can be expressed in terms of 
+$Z_M(\alpha,\beta)$, $Z_d(\beta)$, and $Z_w(\alpha)$,
+\begin{equation}
+  \begin{split}
+     &\frac{\frac{\exp\left[-\beta E_d(\w)\right]}{Z_d(\beta)} \frac{\exp\left[-\alpha E_w(\w)\right]}{Z_w(\alpha)}}{\p(\dat|\alpha,\beta)} =\frac{\exp\left[-M(\w)\right]}{Z_M(\alpha,\beta)}\\
+    \Rightarrow &\p(\dat|\alpha,\beta) = \frac{Z_M(\alpha,\beta)}{Z_d(\beta)Z_w(\alpha)}
+  \end{split}
+  \label{eq:evidence}
+\end{equation}
+At this point, we apply Laplace's approximation, which yields a
+Gaussian model for th eposterior.  The most probable value of $\w$,
+denoted by $\wmp$, satisfies the following equation
+\begin{equation}
+  \begin{split}
+    &\left.\nabla_{\w} M(\w)\right|_{\w = \wmp}  = 0, \\
+   \Rightarrow  &\beta\bPhi^T\W(\bPhi\wmp -\dat)+\alpha\C\wmp = 0,\\
+    \Rightarrow &\left(\beta\bPhi^T\W\bPhi + \alpha \C\right)\wmp = \beta\bPhi^T\W\dat,\\
+    \Rightarrow &\A(\alpha,\beta)\wmp = \beta\bPhi^T\W\dat,
+  \end{split}
+\end{equation}
+where
+\begin{equation}
+  \A(\alpha,\beta) \equiv \nabla_{\w}\nabla_{\w}M(\w) = \beta\B + \alpha\C,
+\end{equation}
+and
+\begin{equation}
+  \B \equiv \bPhi^T\W\bPhi.
+\end{equation}
+Notice that $\wmp$ is a function of $\alpha$ and $\beta$. If $n=k$,
+then for $\alpha=0$ we can fit the data perfectly, even if the data is
+noisy. To avoid fitting the noise, we can choose a finite value of
+$\alpha$ to obtain a smoother interpolant that will ignore some of the
+noise. Of course, in the limit of $\alpha \gg 1$ the interpolant will
+completely ignore the data!
+\newline
+\noindent
+In any event, given $\alpha$ and $\beta$ the posterior probability for
+$\w$ given $\dat$ can be approximated by
+\begin{equation}
+  \p(\w|\dat,\alpha,\beta) \approx (2\pi)^{-k/2}\left[\det(\A)\right]^{1/2}\exp\left(-\frac{1}{2}(\w-\wmp)^T\A(\w-\wmp)\right).
+\end{equation}
+This approximation allows us to evaluate $Z_M(\alpha,\beta)$
+approximately by substituting $\w = \wmp$ into the exact posterior and
+into the Guassian approximation to the posterior and then equating the
+two. This yields
+\begin{equation}
+  \frac{\exp\left[-M(\wmp)\right]}{Z_M(\alpha,\beta)} \approx (2\pi)^{-k/2}\left[\det(\A)\right]^{1/2}.
+\end{equation}
+\begin{equation}
+\Rightarrow Z_M(\alpha,\beta) \approx (2\pi)^{k/2}\exp\left[-M(\wmp)\right]\det(\A)^{-1/2}
+\end{equation}
+With this approximation we have a convenient form for the evidence in (\ref{eq:evidence}),
+\begin{equation}
+  \p(\dat|\alpha,\beta) \approx \frac{ (2\pi)^{k/2}\exp\left[-M(\wmp)\right]\det(\A)^{-1/2}}{
+    \beta^{-n/2} \left[ \det(\W) \right]^{-1/2} \alpha^{-k/2} \left[ \det(\C) \right]^{-1/2} }
+\end{equation}
+\newline
+\noindent
+{\bf The Bayesian choice for $\alpha$ and $\beta$:}
+Bayes' Theorem yields the probability of $\alpha$ and $\beta$, conditioned on $\dat$.
+Assuming we have an approriate prior for $\alpha$ and $\beta$, $p(\alpha,\beta)$ say, then
+\begin{equation}
+  \begin{split}
+    \p(\alpha,\beta|\dat) &= \frac{\p(\dat|\alpha,\beta)p(\alpha,\beta)}{\p(\dat)}\\
+    &\propto \frac{Z_M(\alpha,\beta)p(\alpha,\beta)}{Z_d(\beta)Z_w(\alpha)}\\
+    &\approx 
+    \frac{ (2\pi)^{k/2}\exp\left[-M(\wmp(\alpha,\beta))\right]\det(\A)^{-1/2}p(\alpha,\beta)}{
+    \beta^{-n/2} \left[ \det(\W) \right]^{-1/2} \alpha^{-k/2} \left[ \det(\C) \right]^{-1/2} }
+  \end{split}
+\end{equation}
+The most probable value of $\alpha$ and $\beta$ can then be obtained by maximizing
+\begin{equation}
+  \begin{split}
+    \log Z(\alpha,\beta) =& -M(\wmp(\alpha,\beta))-\frac{1}{2}\log\left(\det\left[\A(\alpha,\beta) \right]\right) + \frac{k}{2}\log(2\pi)+\frac{n}{2}\log(\beta)+\frac{1}{2}\log\left(\det \W \right)\\
+    &+ \frac{k}{2} \log(\alpha) + \frac{1}{2} \log \det \C +\log(p(\alpha,\beta))+constant,\\
+    =& -M(\wmp(\alpha,\beta))-\frac{1}{2}\log\left(\det\left[ \beta\B+\alpha \C\right]\right) +\frac{n}{2}\log(\beta)+ \frac{k}{2} \log(\alpha) +  \log(p(\alpha,\beta))+constant,\\
+  \end{split}
+\end{equation}
+\end{document}
