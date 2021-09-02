@@ -1,6 +1,6 @@
 function [fname,basin_names,A3D] = core(slice,modeflag)
-% if modeflag == 1 average all the data in the same OCIM grid box and assign an uncertainty to the average
-% if modeflag == 0 keep the multiple data points that fall in the same OCIM grid box 
+% if modeflag == 'all' average all the data in the same OCIM grid box and assign an uncertainty to the average
+% if modeflag == 'unique' keep the multiple data points that fall in the same OCIM grid box 
     fprintf('Time-slice options:\n')
     switch(slice)
       case 1,
@@ -207,7 +207,7 @@ function [fname,basin_names,A3D] = core(slice,modeflag)
     anom = a-glodap_c14_age;
     
     
-    if (modeflag == 0)
+    if (strcmp(modeflag,'all')
         %
         % Second file with no averaging, all the data are kept 
         % even if there are multiple measurements in the same box
@@ -222,7 +222,7 @@ function [fname,basin_names,A3D] = core(slice,modeflag)
                     j(i),glodap_c14_age(i),anom(i),a_err(i),basin(i));
         end
         fclose(fid);
-    elseif (modeflag == 1)
+    elseif (strcmp(modeflag,'unique'))
         %
         % Second file with ONLY ONE AGE PER OCIM GRID BOX
         %
