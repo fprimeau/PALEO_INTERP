@@ -1,4 +1,4 @@
-rbf_type = 'inverse_gaussian'
+rbf_type = 'inverse_quadric'
 if(strcmp(rbf_type,'gaussian'))
     load gaussian.mat
 elseif(strcmp(rbf_type,'inverse_quadric'))
