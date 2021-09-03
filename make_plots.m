@@ -5,7 +5,7 @@ elseif(strcmp(rbf_type,'inverse_quadric'))
     load inverse_quadric.mat
 end
    
-load('transport_Redi_jan2013.mat','M3d','MSKS','grd');
+load('transport_Redi_Jan2013.mat','M3d','MSKS','grd');
 PAC = MSKS.PAC;
 ATL = MSKS.ATL;
 
