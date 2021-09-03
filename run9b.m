@@ -105,8 +105,8 @@ function S = run9b(fname,A3D,modeflag,rbf_type)
     switch (rbf_type)
       case {'gaussian'}
         rbf = @(ep,x) exp(-(ep*x).^2);
-        mm = 2;
-        ep = logspace(0,6,150);
+        mm = 1;
+        ep = logspace(-1,6,150);
       case {'inverse_quadric'}
         rbf = @(ep,x) 1./sqrt(1+(ep*x).^2); 
         mm = 1;

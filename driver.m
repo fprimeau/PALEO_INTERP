@@ -44,7 +44,7 @@ for slice = 1:6
     %   rbf_type = 'exp';
     %
     % I tested only the gaussian and the inverse quadric and both seem to work well.
-    rbf_type = 'inverse_quadric';
+    rbf_type = 'gaussian';
 
 
     % 
