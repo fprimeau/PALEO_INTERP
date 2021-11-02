@@ -214,11 +214,11 @@ function [fname,basin_names,A3D] = core(slice,modeflag)
         %
         name = ['all_',fname];
         fid = fopen(name,'w');
-        fprintf(fid,' lat   lon depth   iy    ix  iz      j glodap <batm> <batm_err> basin \n');
+        fprintf(fid,' lat   lon depth   iy    ix  iz      j glodap <anom batm> <batm_err> basin \n');
         for i = 1:length(j)
             fprintf(fid,'%4.0f  %4.0f  %4.0f  %3i  %4i  %2i ',...
                     y(i),x(i),-z(i),iy(i),ix(i),iz(i));
-            fprintf(fid, '%6i   %4.0f  %4.0f       %4.0f  %4i\n',...
+            fprintf(fid, '%6i   %4.0f  %9.0f       %4.0f  %4i\n',...
                     j(i),glodap_c14_age(i),anom(i),a_err(i),basin(i));
         end
         fclose(fid);
