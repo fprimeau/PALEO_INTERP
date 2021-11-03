@@ -35,7 +35,7 @@ function S = run11(fname,A3D,modeflag,rbf_type,version)
     d = log(total_age);
 
     % precision matrix for log c14-age
-    sig = log(1+a_err./total_age);
+    sig = log(1+abs(a_err)./total_age);
     sig2 = sig.^2;
 
     ww = 1./sig2; ww = ww/min(ww);
@@ -223,7 +223,6 @@ function [logZ,S] = xmod10(rbf,sig,logep,inflag,d,prior_target,msk,DM_data,DM_ev
     Ed = @(dw) 0.5*(IMT*dw-sd)'*WW*(IMT*dw-sd);
     B = IMT'*WW*IMT; 
     %%                                                                 %
-
 
     %% neg log posterior = log(prob(w|d,alpha,beta))                   %
     A = @(alpha,beta) alpha*I+beta*B;
