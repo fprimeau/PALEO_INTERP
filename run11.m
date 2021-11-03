@@ -1,5 +1,4 @@
 function S = run11(fname,A3D,modeflag,rbf_type,version)
-%WTF    
     %% load the OCIM stuff                                              %
     tmp = load('myMTMJan2015.mat','M3d','grd','MTM');
     msk = tmp.M3d; % OCIM wet-dry mask (wet == 1, dry == 0);
@@ -265,8 +264,6 @@ function [logZ,S] = xmod10(rbf,sig,logep,inflag,d,prior_target,msk,DM_data,DM_ev
             it = it+1;
             logP = logZ_function(alpha,beta);
             
-            %lama = beta*lamb;
-            %gam = sum(lama./(lama+alpha));
             gam = nw - alpha*trace(inv(A(alpha,beta)));
             g = [2*alpha*Ew(wmp)-gam;...
                  2*beta*Ed(wmp)-N+gam];
